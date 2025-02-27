@@ -9,7 +9,6 @@ function App() {
   const [followUpInput, setFollowUpInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  // New state for storing the log of used templates
   const [templateLog, setTemplateLog] = useState([]);
 
   // Styles
@@ -72,6 +71,12 @@ function App() {
     fontSize: "14px",
   };
 
+  const waitNoteStyle = {
+    marginTop: "10px",
+    color: "#555",
+    fontStyle: "italic",
+  };
+
   // Handlers
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -92,10 +97,8 @@ function App() {
     }
   };
 
-  // After a successful submission, add the used template to the log.
   const addToTemplateLog = (template) => {
     setTemplateLog((prevLog) => {
-      // Avoid duplicates if needed
       if (!prevLog.includes(template)) {
         return [...prevLog, template];
       }
@@ -163,7 +166,6 @@ function App() {
     setLoading(false);
   };
 
-  // Render modified template output with copy option.
   let displayContent = null;
   if (extractedData && extractedData.result) {
     displayContent = (
@@ -204,7 +206,6 @@ function App() {
     );
   }
 
-  // Render a log of previously used LaTeX templates.
   let logContent = null;
   if (templateLog.length > 0) {
     logContent = (
@@ -239,6 +240,7 @@ function App() {
       <button onClick={handleUpload} disabled={loading} style={loading ? buttonDisabledStyle : buttonStyle}>
         {loading ? "Processing..." : "Upload and Modify Template"}
       </button>
+      {loading && <p style={waitNoteStyle}>Processing request. Please wait 2-5 minutes...</p>}
       {error && <p style={errorStyle}>{error}</p>}
       {followUpContent}
       {displayContent}
